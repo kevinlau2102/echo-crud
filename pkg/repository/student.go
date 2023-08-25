@@ -51,3 +51,31 @@ func (sr StudentRepository) CreateStudent(req domain.Student) error {
 	}
 	return nil
 }
+
+func (sr StudentRepository) UpdateStudent(req domain.Student) error {
+	sql := `UPDATE student SET fullname = $1, address = $2, birthdate = $3, class = $4, batch = $5, school_name = $6 WHERE id = $7`
+	stmt, err := sr.db.Prepare(sql)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err2 := stmt.Exec(req.Fullname, req.Address, req.Birthdate, req.Class, req.Batch, req.SchoolName, req.Id)
+	if err2 != nil {
+		return err2
+	}
+	return nil
+}
+
+func (sr StudentRepository) DeleteStudent(id int) error {
+	sql := `DELETE FROM student WHERE id = $1`
+	stmt, err := sr.db.Prepare(sql)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err2 := stmt.Exec(id)
+	if err2 != nil {
+		return err2
+	}
+	return nil
+}

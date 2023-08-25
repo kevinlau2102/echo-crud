@@ -4,9 +4,10 @@ import (
 	"crud_echo/pkg/domain"
 	"crud_echo/pkg/dto"
 	"crud_echo/shared/response"
-	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
+
+	"github.com/labstack/echo/v4"
 )
 
 type StudentControler struct {
@@ -39,6 +40,29 @@ func (sc *StudentControler) CreateStudent(c echo.Context) error {
 		return response.SetResponse(c, http.StatusBadRequest, err.Error(), nil)
 	}
 	if err := sc.StudentUsecase.CreateStudent(studentdto); err != nil {
+		return response.SetResponse(c, http.StatusInternalServerError, err.Error(), nil)
+	}
+	return response.SetResponse(c, http.StatusOK, "success", nil)
+}
+
+func (sc *StudentControler) UpdateStudent(c echo.Context) error {
+	var studentdto dto.StudentDTO
+	if err := c.Bind(&studentdto); err != nil {
+		return response.SetResponse(c, http.StatusBadRequest, "bad request", nil)
+	}
+	if err := studentdto.Validation(); err != nil {
+		return response.SetResponse(c, http.StatusBadRequest, err.Error(), nil)
+	}
+	id, _ := strconv.Atoi(c.Param("id"))
+	if err := sc.StudentUsecase.UpdateStudent(studentdto, id); err != nil {
+		return response.SetResponse(c, http.StatusInternalServerError, err.Error(), nil)
+	}
+	return response.SetResponse(c, http.StatusOK, "success", nil)
+}
+
+func (sc *StudentControler) DeleteStudent(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	if err := sc.StudentUsecase.DeleteStudent(id); err != nil {
 		return response.SetResponse(c, http.StatusInternalServerError, err.Error(), nil)
 	}
 	return response.SetResponse(c, http.StatusOK, "success", nil)

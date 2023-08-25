@@ -1,7 +1,7 @@
 {
   "db_username": "postgres",
-  "db_password": "prasetya",
+  "db_password": "12345",
   "db_host": "localhost",
   "db_port": 5432,
-  "db_name": "crud_echo"
+  "db_name": "student"
 }

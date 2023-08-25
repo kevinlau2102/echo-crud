@@ -16,10 +16,14 @@ type StudentRepository interface {
 	GetStudents() ([]Student, error)
 	GetStudent(id int) (Student, error)
 	CreateStudent(req Student) error
+	UpdateStudent(req Student) error
+	DeleteStudent(id int) error
 }
 
 type StudentUsecase interface {
 	GetStudents() ([]Student, error)
 	GetStudent(id int) (Student, error)
 	CreateStudent(req dto.StudentDTO) error
+	UpdateStudent(req dto.StudentDTO, id int) error
+	DeleteStudent(id int) error
 }

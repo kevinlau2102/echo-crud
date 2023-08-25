@@ -29,3 +29,14 @@ func (su StudentUsecase) CreateStudent(req dto.StudentDTO) error {
 func (su StudentUsecase) GetStudent(id int) (domain.Student, error) {
 	return su.StudentRepository.GetStudent(id)
 }
+
+func (su StudentUsecase) UpdateStudent(req dto.StudentDTO, id int) error {
+	var student domain.Student
+	mapstructure.Decode(req, &student)
+	student.Id = id
+	return su.StudentRepository.UpdateStudent(student)
+}
+
+func (su StudentUsecase) DeleteStudent(id int) error {
+	return su.StudentRepository.DeleteStudent(id)
+}
