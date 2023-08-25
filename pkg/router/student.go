@@ -16,4 +16,6 @@ func NewStudentRouter(e *echo.Echo, g *echo.Group, db *sql.DB) {
 	}
 
 	e.GET("/student", sc.GetStudents)
+	e.GET("/student/:id", sc.GetStudent)
+	e.POST("/student", sc.CreateStudent)
 }

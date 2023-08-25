@@ -6,7 +6,7 @@ import (
 )
 
 type StudentRepository struct {
-	db *sql.DB
+	db *sql.DB // nil
 }
 
 func NewStudentRepository(db *sql.DB) domain.StudentRepository {
@@ -28,4 +28,26 @@ func (sr StudentRepository) GetStudents() ([]domain.Student, error) {
 		students = append(students, student)
 	}
 	return students, err
+}
+
+func (sr StudentRepository) GetStudent(id int) (domain.Student, error) {
+	var student domain.Student
+	sql := `SELECT * FROM student WHERE id = $1`
+
+	err := sr.db.QueryRow(sql, id).Scan(&student.Id, &student.Fullname, &student.Address, &student.Birthdate, &student.Class, &student.Batch, &student.SchoolName)
+	return student, err
+}
+
+func (sr StudentRepository) CreateStudent(req domain.Student) error {
+	sql := `INSERT INTO student (fullname, address, birthdate, class, batch, school_name) values ($1, $2, $3, $4, $5, $6)`
+	stmt, err := sr.db.Prepare(sql)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err2 := stmt.Exec(req.Fullname, req.Address, req.Birthdate, req.Class, req.Batch, req.SchoolName)
+	if err2 != nil {
+		return err2
+	}
+	return nil
 }

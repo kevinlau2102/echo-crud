@@ -1,5 +1,7 @@
 package domain
 
+import "crud_echo/pkg/dto"
+
 type Student struct {
 	Id         int    `json:"id"`
 	Fullname   string `json:"fullname"`
@@ -12,8 +14,12 @@ type Student struct {
 
 type StudentRepository interface {
 	GetStudents() ([]Student, error)
+	GetStudent(id int) (Student, error)
+	CreateStudent(req Student) error
 }
 
 type StudentUsecase interface {
 	GetStudents() ([]Student, error)
+	GetStudent(id int) (Student, error)
+	CreateStudent(req dto.StudentDTO) error
 }
